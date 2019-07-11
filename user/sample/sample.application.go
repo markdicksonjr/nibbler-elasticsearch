@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/markdicksonjr/nibbler"
+	NibElastic "github.com/markdicksonjr/nibbler-elasticsearch"
 	NibUserElastic "github.com/markdicksonjr/nibbler-elasticsearch/user"
-	"github.com/markdicksonjr/nibbler/database/elasticsearch"
 	"github.com/markdicksonjr/nibbler/user"
 	"log"
 )
@@ -15,7 +15,7 @@ type UserAndDbExtensions struct {
 }
 
 func allocateEsExtensions() UserAndDbExtensions {
-	elasticExtension := elasticsearch.Extension{}
+	elasticExtension := NibElastic.Extension{}
 
 	elasticUserExtension := NibUserElastic.Extension{
 		ElasticExtension: &elasticExtension,

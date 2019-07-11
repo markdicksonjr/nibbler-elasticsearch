@@ -4,12 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/markdicksonjr/nibbler"
-	"github.com/markdicksonjr/nibbler/database/elasticsearch"
+	nes "github.com/markdicksonjr/nibbler-elasticsearch"
 )
 
 type Extension struct {
 	nibbler.NoOpExtension
-	ElasticExtension *elasticsearch.Extension
+	ElasticExtension *nes.Extension
 }
 
 func (s *Extension) Init(app *nibbler.Application) error {
@@ -44,7 +44,7 @@ func (s *Extension) GetUserById(id string) (*nibbler.User, error) {
 	}
 
 	userValue := nibbler.User{}
-	err = json.Unmarshal(*result.Source, &userValue)
+	err = json.Unmarshal(result.Source, &userValue)
 	return &userValue, err
 }
 
@@ -63,7 +63,7 @@ func (s *Extension) GetUserByEmail(email string) (*nibbler.User, error) {
 	}
 
 	userValue := nibbler.User{}
-	err = json.Unmarshal(*result.Hits.Hits[0].Source, &userValue)
+	err = json.Unmarshal(result.Hits.Hits[0].Source, &userValue)
 	return &userValue, err
 }
 
@@ -81,7 +81,7 @@ func (s *Extension) GetUserByUsername(username string) (*nibbler.User, error) {
 	}
 
 	userValue := nibbler.User{}
-	err = json.Unmarshal(*result.Hits.Hits[0].Source, &userValue)
+	err = json.Unmarshal(result.Hits.Hits[0].Source, &userValue)
 	return &userValue, err
 }
 
@@ -99,7 +99,7 @@ func (s *Extension) GetUserByPasswordResetToken(token string) (*nibbler.User, er
 	}
 
 	userValue := nibbler.User{}
-	err = json.Unmarshal(*result.Hits.Hits[0].Source, &userValue)
+	err = json.Unmarshal(result.Hits.Hits[0].Source, &userValue)
 	return &userValue, err
 }
 
@@ -117,7 +117,7 @@ func (s *Extension) GetUserByEmailValidationToken(token string) (*nibbler.User, 
 	}
 
 	userValue := nibbler.User{}
-	err = json.Unmarshal(*result.Hits.Hits[0].Source, &userValue)
+	err = json.Unmarshal(result.Hits.Hits[0].Source, &userValue)
 	return &userValue, err
 }
 

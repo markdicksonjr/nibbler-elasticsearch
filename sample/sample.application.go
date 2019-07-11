@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/markdicksonjr/nibbler"
-	"github.com/markdicksonjr/nibbler/database/elasticsearch"
+	nes "github.com/markdicksonjr/nibbler-elasticsearch"
 	"log"
 )
 
@@ -18,7 +18,7 @@ func main() {
 	// initialize the application, provide config, logger, extensions
 	appContext := nibbler.Application{}
 	if err = appContext.Init(config, nibbler.DefaultLogger{}, []nibbler.Extension{
-		&elasticsearch.Extension{},
+		&nes.Extension{},
 	}); err != nil {
 		log.Fatal(err.Error())
 	}
