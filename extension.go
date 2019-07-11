@@ -11,6 +11,9 @@ type Extension struct {
 
 	Client *elastic.Client
 	Url    string
+
+	username string
+	password string
 }
 
 func (s *Extension) Init(app *nibbler.Application) error {
@@ -29,7 +32,19 @@ func (s *Extension) Init(app *nibbler.Application) error {
 		}
 	}
 
-	s.Client, err = elastic.NewClient(elastic.SetSniff(false), elastic.SetURL(s.Url))
+	s.username = app.GetConfiguration().Raw.Get("elastic", "user").String("")
+	s.password = app.GetConfiguration().Raw.Get("elastic", "password").String("")
+
+	options := []elastic.ClientOptionFunc{
+		elastic.SetSniff(false),
+		elastic.SetURL(s.Url),
+	}
+
+	if s.username != "" && s.password != "" {
+		options = append(options, elastic.SetBasicAuth(s.username, s.password))
+	}
+
+	s.Client, err = elastic.NewClient(options...)
 
 	return err
 }
