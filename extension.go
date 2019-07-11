@@ -3,7 +3,7 @@ package nibbler_elasticsearch
 import (
 	"errors"
 	"github.com/markdicksonjr/nibbler"
-	"github.com/olivere/elastic"
+	"github.com/olivere/elastic/v7"
 )
 
 type Extension struct {
