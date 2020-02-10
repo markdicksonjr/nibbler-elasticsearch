@@ -31,25 +31,25 @@ func allocateEsExtensions() UserAndDbExtensions {
 }
 
 func main() {
+	logger := nibbler.DefaultLogger{}
+	config, err := nibbler.LoadConfiguration()
+	nibbler.LogFatalNonNil(logger, err)
 
-	// allocate logger and configuration
-	config, err := nibbler.LoadConfiguration(nil)
-
-	sqlExtensions := allocateEsExtensions()
+	esExtensions := allocateEsExtensions()
 
 	// initialize the application, provide config, logger, extensions
 	appContext := nibbler.Application{}
-	if err = appContext.Init(config, nibbler.DefaultLogger{}, []nibbler.Extension{
-		sqlExtensions.DbExtension,
-		sqlExtensions.UserPersistenceExtension,
-		sqlExtensions.UserExtension,
+	if err = appContext.Init(config, logger, []nibbler.Extension{
+		esExtensions.DbExtension,
+		esExtensions.UserPersistenceExtension,
+		esExtensions.UserExtension,
 	}); err != nil {
 		log.Fatal(err.Error())
 	}
 
 	// create a test user
 	emailVal := "test@example.com"
-	_, errCreate := sqlExtensions.UserExtension.Create(&nibbler.User{
+	_, errCreate := esExtensions.UserExtension.Create(&nibbler.User{
 		Email: &emailVal,
 	})
 
@@ -57,7 +57,7 @@ func main() {
 		log.Fatal(errCreate.Error())
 	}
 
-	uV, errFind := sqlExtensions.UserExtension.GetUserByEmail(emailVal)
+	uV, errFind := esExtensions.UserExtension.GetUserByEmail(emailVal)
 
 	if errFind != nil {
 		log.Fatal(errFind.Error())
@@ -70,7 +70,7 @@ func main() {
 	uV.FirstName = &firstName
 	uV.LastName = &lastName
 
-	if err = sqlExtensions.UserExtension.Update(uV); err != nil {
+	if err = esExtensions.UserExtension.Update(uV); err != nil {
 		log.Fatal(err.Error())
 	}
 

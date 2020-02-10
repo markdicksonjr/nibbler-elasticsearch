@@ -28,7 +28,7 @@ func (s *Extension) Init(app *nibbler.Application) error {
 		}
 
 		if !createIndex.Acknowledged {
-			app.GetLogger().Info("in user extension, user index in elastic not acknowledged after creation")
+			app.Logger.Info("in user extension, user index in elastic not acknowledged after creation")
 		}
 	}
 

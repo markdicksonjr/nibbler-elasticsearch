@@ -7,17 +7,13 @@ import (
 )
 
 func main() {
-
-	// allocate logger and configuration
-	config, err := nibbler.LoadConfiguration(nil)
-
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+	logger := nibbler.DefaultLogger{}
+	config, err := nibbler.LoadConfiguration()
+	nibbler.LogFatalNonNil(logger, err)
 
 	// initialize the application, provide config, logger, extensions
 	appContext := nibbler.Application{}
-	if err = appContext.Init(config, nibbler.DefaultLogger{}, []nibbler.Extension{
+	if err = appContext.Init(config, logger, []nibbler.Extension{
 		&nes.Extension{},
 	}); err != nil {
 		log.Fatal(err.Error())

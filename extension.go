@@ -19,21 +19,21 @@ type Extension struct {
 func (s *Extension) Init(app *nibbler.Application) error {
 	var err error
 
-	if app.GetConfiguration() == nil {
+	if app.Config == nil {
 		return errors.New("app configuration not provided")
 	}
 
 	// if the Url attribute isn't set, find the config in environment variables
 	if len(s.Url) == 0 {
-		s.Url = app.GetConfiguration().Raw.Get("elastic", "url").String("")
+		s.Url = app.Config.Raw.Get("elastic", "url").String("")
 
 		if len(s.Url) == 0 {
-			s.Url = app.GetConfiguration().Raw.Get("database", "url").String("http://localhost:9200")
+			s.Url = app.Config.Raw.Get("database", "url").String("http://localhost:9200")
 		}
 	}
 
-	s.username = app.GetConfiguration().Raw.Get("elastic", "user").String("")
-	s.password = app.GetConfiguration().Raw.Get("elastic", "password").String("")
+	s.username = app.Config.Raw.Get("elastic", "user").String("")
+	s.password = app.Config.Raw.Get("elastic", "password").String("")
 
 	options := []elastic.ClientOptionFunc{
 		elastic.SetSniff(false),
@@ -47,6 +47,10 @@ func (s *Extension) Init(app *nibbler.Application) error {
 	s.Client, err = elastic.NewClient(options...)
 
 	return err
+}
+
+func (s *Extension) GetName() string {
+	return "elasticsearch"
 }
 
 // TODO: these are pretty silly
